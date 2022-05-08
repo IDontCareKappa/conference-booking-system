@@ -1,5 +1,7 @@
 package com.example.conferencebookingsystem.service;
 
+import com.example.conferencebookingsystem.exception.LectureError;
+import com.example.conferencebookingsystem.exception.LectureException;
 import com.example.conferencebookingsystem.exception.UserError;
 import com.example.conferencebookingsystem.exception.UserException;
 import com.example.conferencebookingsystem.model.Lecture;
@@ -57,9 +59,13 @@ public class ConferenceServiceImpl implements ConferenceService {
     }
 
     @Override
-    public User registerUserForLecture(Long lectureId, String login, String email) {
+    public void registerUserForLecture(Long lectureId, String login, String email) {
         Lecture lecture = lectureRepo.findById(lectureId)
-                .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
+                .orElseThrow(() -> new LectureException(LectureError.LECTURE_NOT_FOUND));
+
+        if (lecture.getUsers().size() == 5){
+            throw new LectureException(LectureError.LECTURE_IS_FULL);
+        }
 
         Optional<User> user = userRepo.findByLogin(login);
         if (user.isPresent()) {
@@ -67,21 +73,27 @@ public class ConferenceServiceImpl implements ConferenceService {
                 throw new UserException(UserError.USER_LOGIN_NOT_AVAILABLE);
             }
 
+            checkUserTimeAvailability(lecture, user);
             checkUsersOfLecture(email, lecture);
 
-            lecture.getUsers().addAll(Arrays.asList(user.get()));
+            lecture.getUsers().addAll(List.of(user.get()));
             lectureRepo.save(lecture);
-
-            return user.get();
 
         } else {
             User newUser = new User(login, email);
             userRepo.save(newUser);
 
-            lecture.getUsers().addAll(Arrays.asList(newUser));
+            lecture.getUsers().addAll(List.of(newUser));
             lectureRepo.save(lecture);
+        }
+    }
 
-            return newUser;
+    private void checkUserTimeAvailability(Lecture lecture, Optional<User> user) {
+        Set<Lecture> userLectures = user.get().getLectures();
+        for (Lecture l : userLectures) {
+            if (l.getTimeStart().equals(lecture.getTimeStart())){
+                throw new UserException(UserError.USER_ASSIGNED_FOR_THIS_TIME);
+            }
         }
     }
 

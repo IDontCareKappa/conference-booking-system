@@ -35,8 +35,8 @@ public class ConferenceController {
     }
 
     @PostMapping("reservation")
-    public User registerUserForLecture(@RequestParam Long lectureId, @RequestParam String login, @RequestParam String email){
-        return conferenceService.registerUserForLecture(lectureId, login, email);
+    public void registerUserForLecture(@RequestParam Long lectureId, @RequestParam String login, @RequestParam String email){
+        conferenceService.registerUserForLecture(lectureId, login, email);
     }
 
 }

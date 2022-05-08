@@ -14,6 +14,6 @@ public interface ConferenceService {
 
     public List<String> getUserConferenceSchedule(String login);
 
-    public User registerUserForLecture(Long lectureId, String login, String email);
+    public void registerUserForLecture(Long lectureId, String login, String email);
 
 }
