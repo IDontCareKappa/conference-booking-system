@@ -1,5 +1,6 @@
 package com.example.conferencebookingsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.*;
 
@@ -23,6 +24,7 @@ public class User {
     @NotNull
     private String email;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private Set<Lecture> lectures = new HashSet<>();
 

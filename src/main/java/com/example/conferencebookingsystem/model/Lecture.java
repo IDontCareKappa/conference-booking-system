@@ -1,5 +1,6 @@
 package com.example.conferencebookingsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,8 +21,10 @@ public class Lecture {
 
     private String topic;
 
+    @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
     private LocalDateTime timeStart;
 
+    @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
     private LocalDateTime timeEnd;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)

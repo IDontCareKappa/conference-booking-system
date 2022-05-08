@@ -15,4 +15,8 @@ public interface ConferenceService {
 
     public void registerUserForLecture(Long lectureId, String login, String email);
 
+    public void cancelReservation(Long lectureId, String login);
+
+    public void updateEmail(String login, String newEmail);
+
 }

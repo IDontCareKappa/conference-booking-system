@@ -46,7 +46,7 @@ public class ConferenceServiceImpl implements ConferenceService {
         List<Lecture> lectures = lectureRepo.findAll();
         for (Lecture lecture :
                 lectures) {
-            schedule.add(lecture.getTopic() + " " + lecture.getTimeStart() + " - " + lecture.getTimeEnd());
+            schedule.add(lecture.getTopic() + " (" + lecture.getTimeStart() + " - " + lecture.getTimeEnd() + ")");
         }
         return schedule;
     }
@@ -146,5 +146,30 @@ public class ConferenceServiceImpl implements ConferenceService {
                 throw new UserException(UserError.USER_ALREADY_ASSIGNED);
             }
         }
+    }
+
+    @Override
+    public void cancelReservation(Long lectureId, String login) {
+        Lecture lecture = lectureRepo.findById(lectureId)
+                .orElseThrow(() -> new LectureException(LectureError.LECTURE_NOT_FOUND));
+        User user = userRepo.findByLogin(login)
+                .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
+
+        if (lecture.getUsers().contains(user)) {
+            lecture.getUsers().remove(user);
+        } else {
+            throw new LectureException(LectureError.LECTURE_USER_NOT_FOUND);
+        }
+
+        lectureRepo.save(lecture);
+    }
+
+    @Override
+    public void updateEmail(String login, String newEmail) {
+        User user = userRepo.findByLogin(login)
+                .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
+
+        user.setEmail(newEmail);
+        userRepo.save(user);
     }
 }

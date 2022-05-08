@@ -2,6 +2,7 @@ package com.example.conferencebookingsystem.controller;
 
 import com.example.conferencebookingsystem.model.Lecture;
 import com.example.conferencebookingsystem.service.ConferenceService;
+import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,9 +34,23 @@ public class ConferenceController {
         return conferenceService.getUserConferenceSchedule(login);
     }
 
-    @PostMapping("reservation")
-    public void registerUserForLecture(@RequestParam Long lectureId, @RequestParam String login, @RequestParam String email){
+    @PostMapping("/reservation")
+    public void registerUserForLecture(@RequestParam Long lectureId,
+                                       @RequestParam String login,
+                                       @RequestParam String email){
         conferenceService.registerUserForLecture(lectureId, login, email);
+    }
+
+    @DeleteMapping("/cancel")
+    public void cancelReservation(@RequestParam Long lectureId,
+                                  @RequestParam String login){
+        conferenceService.cancelReservation(lectureId, login);
+    }
+
+    @PatchMapping("/update")
+    public void updateEmail(@RequestParam String login,
+                            @RequestParam String newEmail){
+        conferenceService.updateEmail(login, newEmail);
     }
 
 }

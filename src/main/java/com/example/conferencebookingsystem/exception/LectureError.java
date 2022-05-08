@@ -2,8 +2,9 @@ package com.example.conferencebookingsystem.exception;
 
 public enum LectureError {
 
-    LECTURE_IS_FULL("Brak miejsc na wybraną prelekcję"),
-    LECTURE_NOT_FOUND("Prelekcja nie istnieje");
+    LECTURE_IS_FULL("Brak miejsc na wybraną prelekcje"),
+    LECTURE_NOT_FOUND("Prelekcja nie istnieje"),
+    LECTURE_USER_NOT_FOUND("Użytkownik nie jest zapisany na daną prelekcje");
 
     private String message;
 
