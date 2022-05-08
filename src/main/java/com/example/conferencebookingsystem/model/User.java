@@ -5,6 +5,9 @@ import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +25,8 @@ public class User {
     private String login;
 
     @NotNull
+    @Size(max = 255)
+    @Email
     private String email;
 
     @JsonIgnore

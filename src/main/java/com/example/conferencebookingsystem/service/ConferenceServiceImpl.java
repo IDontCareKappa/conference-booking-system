@@ -9,6 +9,8 @@ import com.example.conferencebookingsystem.model.User;
 import com.example.conferencebookingsystem.repository.LectureRepo;
 import com.example.conferencebookingsystem.repository.UserRepo;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -63,7 +65,7 @@ public class ConferenceServiceImpl implements ConferenceService {
             userLectures.add(lecture.getTopic() + " " + lecture.getTimeStart() + " - " + lecture.getTimeEnd());
         }
 
-        if (userLectures.isEmpty()){
+        if (userLectures.isEmpty()) {
             throw new UserException(UserError.USER_IS_NOT_ASSIGN_TO_ANY_LECTURE);
         }
 
@@ -75,7 +77,7 @@ public class ConferenceServiceImpl implements ConferenceService {
         Lecture lecture = lectureRepo.findById(lectureId)
                 .orElseThrow(() -> new LectureException(LectureError.LECTURE_NOT_FOUND));
 
-        if (lecture.getUsers().size() == 5){
+        if (lecture.getUsers().size() == 5) {
             throw new LectureException(LectureError.LECTURE_IS_FULL);
         }
 
@@ -84,13 +86,11 @@ public class ConferenceServiceImpl implements ConferenceService {
             if (!user.get().getEmail().equals(email)) {
                 throw new UserException(UserError.USER_LOGIN_NOT_AVAILABLE);
             }
-
             checkUserTimeAvailability(lecture, user);
             checkUsersOfLecture(email, lecture);
 
             lecture.getUsers().addAll(List.of(user.get()));
             lectureRepo.save(lecture);
-
         } else {
             User newUser = new User(login, email);
             userRepo.save(newUser);
@@ -133,7 +133,7 @@ public class ConferenceServiceImpl implements ConferenceService {
     private void checkUserTimeAvailability(Lecture lecture, Optional<User> user) {
         Set<Lecture> userLectures = user.get().getLectures();
         for (Lecture l : userLectures) {
-            if (l.getTimeStart().equals(lecture.getTimeStart())){
+            if (l.getTimeStart().equals(lecture.getTimeStart())) {
                 throw new UserException(UserError.USER_ASSIGNED_FOR_THIS_TIME);
             }
         }
@@ -166,10 +166,28 @@ public class ConferenceServiceImpl implements ConferenceService {
 
     @Override
     public void updateEmail(String login, String newEmail) {
+        if (ObjectUtils.isEmpty(newEmail)) {
+            throw new UserException(UserError.USER_EMAIL_EMPTY);
+        }
+
         User user = userRepo.findByLogin(login)
                 .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
 
         user.setEmail(newEmail);
         userRepo.save(user);
+    }
+
+    @Override
+    public List<String> getRegisteredUsers() {
+        List<User> users = userRepo.findAll();
+        List<String> registeredUsers = new ArrayList<>();
+
+        for (User user : users) {
+            if (!ObjectUtils.isEmpty(user.getLectures())) {
+                registeredUsers.add(user.getLogin() + " " + user.getEmail());
+            }
+        }
+
+        return registeredUsers;
     }
 }

@@ -19,4 +19,5 @@ public interface ConferenceService {
 
     public void updateEmail(String login, String newEmail);
 
+    List<String> getRegisteredUsers();
 }

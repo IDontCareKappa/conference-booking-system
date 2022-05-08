@@ -6,6 +6,7 @@ import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -49,8 +50,13 @@ public class ConferenceController {
 
     @PatchMapping("/update")
     public void updateEmail(@RequestParam String login,
-                            @RequestParam String newEmail){
+                            @RequestParam @Valid String newEmail){
         conferenceService.updateEmail(login, newEmail);
+    }
+
+    @GetMapping("/users")
+    public List<String> getRegisteredUsers(){
+        return conferenceService.getRegisteredUsers();
     }
 
 }
