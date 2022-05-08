@@ -1,7 +1,6 @@
 package com.example.conferencebookingsystem.service;
 
 import com.example.conferencebookingsystem.model.Lecture;
-import com.example.conferencebookingsystem.model.User;
 
 import java.util.List;
 

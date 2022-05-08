@@ -1,0 +1,12 @@
+2022-05-08T18:37:24.498031300
+pawel@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Backend development"
+2022-05-08T18:37:48.875889200
+kamil@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Cyberbezpieczenstwo serwisow internetowych"
+2022-05-08T18:38:42.561074400
+kamil@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Narzedzie Docker Compose w akcji"
+2022-05-08T18:40:27.610735
+kamil@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Narzedzie Docker Compose w akcji"

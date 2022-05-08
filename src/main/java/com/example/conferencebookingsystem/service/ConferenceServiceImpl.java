@@ -10,7 +10,19 @@ import com.example.conferencebookingsystem.repository.LectureRepo;
 import com.example.conferencebookingsystem.repository.UserRepo;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ConferenceServiceImpl implements ConferenceService {
@@ -86,6 +98,36 @@ public class ConferenceServiceImpl implements ConferenceService {
             lecture.getUsers().addAll(List.of(newUser));
             lectureRepo.save(lecture);
         }
+
+        try {
+            sendEmailNotification(email, lecture.getTopic());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendEmailNotification(String userEmail, String lectureTopic) throws IOException {
+        final String emailContent = LocalDateTime.now().toString() + "\n" + userEmail
+                + "\n" + "Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję \"" + lectureTopic + "\"\n";
+
+        try {
+            File file = new File("powiadomienia.txt");
+            file.createNewFile();
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        final Path path = Paths.get("powiadomienia.txt");
+
+        try (
+                final BufferedWriter writer = Files.newBufferedWriter(path,
+                        StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        ) {
+            writer.write(emailContent);
+            writer.flush();
+        }
+
     }
 
     private void checkUserTimeAvailability(Lecture lecture, Optional<User> user) {

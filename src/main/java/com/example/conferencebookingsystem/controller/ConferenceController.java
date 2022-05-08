@@ -1,7 +1,6 @@
 package com.example.conferencebookingsystem.controller;
 
 import com.example.conferencebookingsystem.model.Lecture;
-import com.example.conferencebookingsystem.model.User;
 import com.example.conferencebookingsystem.service.ConferenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
