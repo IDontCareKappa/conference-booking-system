@@ -59,4 +59,14 @@ public class ConferenceController {
         return conferenceService.getRegisteredUsers();
     }
 
+    @GetMapping("/lectures")
+    public List<String> getLecturesInfo(){
+        return conferenceService.getLecturesInfo();
+    }
+
+    @GetMapping("topics")
+    public List<String> getTopicsInfo(){
+        return conferenceService.getTopicsInfo();
+    }
+
 }

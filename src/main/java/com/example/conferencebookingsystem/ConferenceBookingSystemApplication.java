@@ -67,14 +67,28 @@ public class ConferenceBookingSystemApplication {
 
         lectureRepo.saveAll(Arrays.asList(l1,l2,l3,l4,l5,l6,l7,l8,l9));
 
-        User user = new User("Tomasz", "tomasz@gmail.com");
-        userRepo.save(user);
+        User u1 = new User("etoothill9", "cbernli9@mlb.com");
+        User u2 = new User("egenese0", "abahia0@nydailynews.com");
+        User u3 = new User("nkeely1", "ceykel1@merriam-webster.com");
+        User u4 = new User("adrowsfield2", "habramovic2@huffingtonpost.com");
+        User u5 = new User("sfoch3", "tglaze3@twitpic.com");
+        User u6 = new User("emacgibbon4", "bheinlein4@smh.com.au");
+        User u7 = new User("slemarchant5", "dossenna5@cnet.com");
+        User u8 = new User("aantuk6", "dmcallan6@xinhuanet.com");
+        User u9 = new User("jsigars7", "bhugk7@devhub.com");
+        User u10 = new User("mwharmby8", "bcockney8@symantec.com");
+        userRepo.saveAll(Arrays.asList(u1,u2,u3,u4,u5,u6,u7,u8,u9,u10));
 
-        l1.getUsers().addAll(Arrays.asList(user));
-        lectureRepo.save(l1);
+        l1.getUsers().addAll(Arrays.asList(u7));
+        l3.getUsers().addAll(Arrays.asList(u2,u6));
+        l4.getUsers().addAll(Arrays.asList(u5));
+        l6.getUsers().addAll(Arrays.asList(u3));
+        l8.getUsers().addAll(Arrays.asList(u8));
+        l9.getUsers().addAll(Arrays.asList(u4,u9,u1));
+        lectureRepo.saveAll(Arrays.asList(l1,l2,l3,l4,l5,l6,l7,l8,l9));
 
-        user = new User("Agata", "agata@gmail.com");
-        userRepo.save(user);
+        u1 = new User("Agata", "agata@gmail.com");
+        userRepo.save(u1);
     }
 
 }

@@ -20,11 +20,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ConferenceServiceImpl implements ConferenceService {
@@ -108,7 +106,7 @@ public class ConferenceServiceImpl implements ConferenceService {
 
     private void sendEmailNotification(String userEmail, String lectureTopic) throws IOException {
         final String emailContent = LocalDateTime.now().toString() + "\n" + userEmail
-                + "\n" + "Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję \"" + lectureTopic + "\"\n";
+                + "\n" + "Szanowny użytkowniku! Informujemy ze zostales zapisany na prelekcje \"" + lectureTopic + "\"\n";
 
         try {
             File file = new File("powiadomienia.txt");
@@ -189,5 +187,44 @@ public class ConferenceServiceImpl implements ConferenceService {
         }
 
         return registeredUsers;
+    }
+
+    @Override
+    public List<String> getLecturesInfo() {
+        List<Lecture> lectures = lectureRepo.findAll();
+        List<String> lecturesInfo = new ArrayList<>();
+        int usersCount = 0;
+        for (Lecture lecture : lectures) {
+            usersCount += lecture.getUsers().size();
+        }
+
+        for (Lecture lecture : lectures) {
+            lecturesInfo.add(lecture.getTopic() + " - " +
+                    String.format("%.2f", (100.0 * (double) lecture.getUsers().size() / (double) usersCount)) + "%");
+        }
+
+        return lecturesInfo;
+    }
+
+    @Override
+    public List<String> getTopicsInfo() {
+        List<Lecture> lectures = lectureRepo.findAll();
+        List<String> topicsInfo = new ArrayList<>();
+        Dictionary<LocalDateTime, Integer> usersCount = new Hashtable();
+        for (Lecture lecture : lectures) {
+            LocalDateTime key = lecture.getTimeStart();
+            if (usersCount.get(key) == null){
+                usersCount.put(key, lecture.getUsers().size());
+            } else {
+                usersCount.put(key, usersCount.get(key) + lecture.getUsers().size());
+            }
+        }
+
+        for (Lecture lecture : lectures) {
+            topicsInfo.add(lecture.getTimeStart() + " " + lecture.getTopic() + " " +
+                    String.format("%.2f", (100.0 * (double) lecture.getUsers().size() / (double) usersCount.get(lecture.getTimeStart()))) + "%");
+        }
+
+        return topicsInfo;
     }
 }

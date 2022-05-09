@@ -20,4 +20,8 @@ public interface ConferenceService {
     public void updateEmail(String login, String newEmail);
 
     List<String> getRegisteredUsers();
+
+    List<String> getLecturesInfo();
+
+    List<String> getTopicsInfo();
 }

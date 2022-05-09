@@ -16,3 +16,45 @@ Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Narzed
 2022-05-08T22:26:04.065884
 kamil@gmail.com
 Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Narzedzie Docker Compose w akcji"
+2022-05-09T10:04:07.042263400
+kamil@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Narzedzie Docker Compose w akcji"
+2022-05-09T10:04:15.522678100
+kamil@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Cyberbezpieczenstwo w systemach Linux"
+2022-05-09T10:04:28.460957700
+basia@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Cyberbezpieczenstwo w systemach Linux"
+2022-05-09T10:04:41.904612300
+kasia@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Cyberbezpieczenstwo w systemach Linux"
+2022-05-09T10:04:54.246646600
+Szczepan@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Cyberbezpieczenstwo w systemach mobilnych"
+2022-05-09T10:09:18.973329100
+Szczepan@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Cyberbezpieczenstwo w systemach mobilnych"
+2022-05-09T10:09:24.943091
+Kasia@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Cyberbezpieczenstwo w systemach Linux"
+2022-05-09T10:09:33.271685100
+Asia@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Frontend development"
+2022-05-09T10:09:39.880672
+Michał@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Backend development"
+2022-05-09T10:09:47.174186900
+Kamil@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Fullstack development"
+2022-05-09T10:09:53.791545900
+Bogdan@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Dockeryzacja aplikacji"
+2022-05-09T10:10:04.630670800
+Piotr@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Narzedzie Docker Compose w akcji"
+2022-05-09T10:10:16.859529800
+Piotr@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Frontend development"
+2022-05-09T10:49:43.140919600
+Piotr@gmail.com
+Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Frontend development"
