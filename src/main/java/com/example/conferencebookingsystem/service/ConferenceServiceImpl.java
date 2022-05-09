@@ -10,7 +10,6 @@ import com.example.conferencebookingsystem.repository.LectureRepo;
 import com.example.conferencebookingsystem.repository.UserRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,8 +19,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -44,11 +43,16 @@ public class ConferenceServiceImpl implements ConferenceService {
     public List<String> getConferenceSchedule() {
         List<String> schedule = new ArrayList<>();
         List<Lecture> lectures = lectureRepo.findAll();
-        for (Lecture lecture :
-                lectures) {
-            schedule.add(lecture.getTopic() + " (" + lecture.getTimeStart() + " - " + lecture.getTimeEnd() + ")");
-        }
+        createSchedule(schedule, lectures);
         return schedule;
+    }
+
+    private void createSchedule(List<String> schedule, List<Lecture> lectures) {
+        for (Lecture lecture : lectures) {
+            schedule.add(lecture.getTopic() + " (" +
+                    formatDateTime(lecture.getTimeStart()) + " - " +
+                    formatDateTime(lecture.getTimeEnd()) + ")");
+        }
     }
 
     @Override
@@ -58,9 +62,10 @@ public class ConferenceServiceImpl implements ConferenceService {
 
         Set<Lecture> lectures = user.getLectures();
         List<String> userLectures = new ArrayList<>();
-        for (Lecture lecture :
-                lectures) {
-            userLectures.add(lecture.getTopic() + " " + lecture.getTimeStart() + " - " + lecture.getTimeEnd());
+        for (Lecture lecture : lectures) {
+            userLectures.add(lecture.getTopic() + " " +
+                    formatDateTime(lecture.getTimeStart()) + " - " +
+                    formatDateTime(lecture.getTimeEnd()));
         }
 
         if (userLectures.isEmpty()) {
@@ -105,7 +110,7 @@ public class ConferenceServiceImpl implements ConferenceService {
     }
 
     private void sendEmailNotification(String userEmail, String lectureTopic) throws IOException {
-        final String emailContent = LocalDateTime.now().toString() + "\n" + userEmail
+        final String emailContent = formatDateTime(LocalDateTime.now()) + "\n" + userEmail
                 + "\n" + "Szanowny użytkowniku! Informujemy ze zostales zapisany na prelekcje \"" + lectureTopic + "\"\n";
 
         try {
@@ -120,7 +125,7 @@ public class ConferenceServiceImpl implements ConferenceService {
 
         try (
                 final BufferedWriter writer = Files.newBufferedWriter(path,
-                        StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+                        StandardCharsets.UTF_8, StandardOpenOption.APPEND)
         ) {
             writer.write(emailContent);
             writer.flush();
@@ -199,7 +204,7 @@ public class ConferenceServiceImpl implements ConferenceService {
         }
 
         for (Lecture lecture : lectures) {
-            lecturesInfo.add(lecture.getTopic() + " - " +
+            lecturesInfo.add("(" + formatDateTime(lecture.getTimeStart()) + ") " + lecture.getTopic() + " - " +
                     String.format("%.2f", (100.0 * (double) lecture.getUsers().size() / (double) usersCount)) + "%");
         }
 
@@ -210,7 +215,7 @@ public class ConferenceServiceImpl implements ConferenceService {
     public List<String> getTopicsInfo() {
         List<Lecture> lectures = lectureRepo.findAll();
         List<String> topicsInfo = new ArrayList<>();
-        Dictionary<LocalDateTime, Integer> usersCount = new Hashtable();
+        Dictionary<LocalDateTime, Integer> usersCount = new Hashtable<>();
         for (Lecture lecture : lectures) {
             LocalDateTime key = lecture.getTimeStart();
             if (usersCount.get(key) == null){
@@ -221,10 +226,14 @@ public class ConferenceServiceImpl implements ConferenceService {
         }
 
         for (Lecture lecture : lectures) {
-            topicsInfo.add(lecture.getTimeStart() + " " + lecture.getTopic() + " " +
+            topicsInfo.add("(" + formatDateTime(lecture.getTimeStart()) + ") " + lecture.getTopic() + " " +
                     String.format("%.2f", (100.0 * (double) lecture.getUsers().size() / (double) usersCount.get(lecture.getTimeStart()))) + "%");
         }
 
         return topicsInfo;
+    }
+
+    public String formatDateTime(LocalDateTime date){
+        return date.format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm"));
     }
 }

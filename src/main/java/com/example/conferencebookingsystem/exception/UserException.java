@@ -2,7 +2,7 @@ package com.example.conferencebookingsystem.exception;
 
 public class UserException extends RuntimeException {
 
-    private UserError userError;
+    private final UserError userError;
 
     public UserException(UserError userError) {
         this.userError = userError;

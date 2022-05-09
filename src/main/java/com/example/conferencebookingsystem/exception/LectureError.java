@@ -6,7 +6,7 @@ public enum LectureError {
     LECTURE_NOT_FOUND("Prelekcja nie istnieje"),
     LECTURE_USER_NOT_FOUND("Użytkownik nie jest zapisany na daną prelekcje");
 
-    private String message;
+    private final String message;
 
     LectureError(String message) {
         this.message = message;

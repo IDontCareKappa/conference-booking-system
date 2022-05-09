@@ -58,3 +58,6 @@ Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Fronte
 2022-05-09T10:49:43.140919600
 Piotr@gmail.com
 Szanowny użytkowniku! Informujemy że zostałeś zapisany na prelekcję "Frontend development"
+05-09-2022 11:28
+Piotr@gmail.com
+Szanowny użytkowniku! Informujemy ze zostales zapisany na prelekcje "Frontend development"

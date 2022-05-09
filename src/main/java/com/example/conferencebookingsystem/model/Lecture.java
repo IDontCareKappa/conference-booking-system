@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,12 +20,15 @@ public class Lecture {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String topic;
 
-    @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
+    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
+    @NotNull
     private LocalDateTime timeStart;
 
-    @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
+    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
+    @NotNull
     private LocalDateTime timeEnd;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)

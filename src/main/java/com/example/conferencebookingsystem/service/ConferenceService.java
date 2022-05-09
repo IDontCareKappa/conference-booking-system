@@ -7,17 +7,17 @@ import java.util.List;
 
 public interface ConferenceService {
 
-    public List<Lecture> getAll();
+    List<Lecture> getAll();
 
-    public List<String> getConferenceSchedule();
+    List<String> getConferenceSchedule();
 
-    public List<String> getUserConferenceSchedule(String login);
+    List<String> getUserConferenceSchedule(String login);
 
-    public void registerUserForLecture(Long lectureId, String login, String email);
+    void registerUserForLecture(Long lectureId, String login, String email);
 
-    public void cancelReservation(Long lectureId, String login);
+    void cancelReservation(Long lectureId, String login);
 
-    public void updateEmail(String login, String newEmail);
+    void updateEmail(String login, String newEmail);
 
     List<String> getRegisteredUsers();
 

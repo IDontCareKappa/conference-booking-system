@@ -79,11 +79,11 @@ public class ConferenceBookingSystemApplication {
         User u10 = new User("mwharmby8", "bcockney8@symantec.com");
         userRepo.saveAll(Arrays.asList(u1,u2,u3,u4,u5,u6,u7,u8,u9,u10));
 
-        l1.getUsers().addAll(Arrays.asList(u7));
+        l1.getUsers().add(u7);
         l3.getUsers().addAll(Arrays.asList(u2,u6));
-        l4.getUsers().addAll(Arrays.asList(u5));
-        l6.getUsers().addAll(Arrays.asList(u3));
-        l8.getUsers().addAll(Arrays.asList(u8));
+        l4.getUsers().add(u5);
+        l6.getUsers().add(u3);
+        l8.getUsers().add(u8);
         l9.getUsers().addAll(Arrays.asList(u4,u9,u1));
         lectureRepo.saveAll(Arrays.asList(l1,l2,l3,l4,l5,l6,l7,l8,l9));
 

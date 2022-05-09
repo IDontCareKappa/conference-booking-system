@@ -2,7 +2,7 @@ package com.example.conferencebookingsystem.exception;
 
 public class LectureException extends RuntimeException {
 
-    private LectureError lectureError;
+    private final LectureError lectureError;
 
     public LectureException(LectureError lectureError) {
         this.lectureError = lectureError;

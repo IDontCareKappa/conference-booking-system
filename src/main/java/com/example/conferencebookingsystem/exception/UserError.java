@@ -9,7 +9,7 @@ public enum UserError {
     USER_ASSIGNED_FOR_THIS_TIME("Uzytkownik jest juz zapisany na prelekcje o tej godzinie"),
     USER_EMAIL_EMPTY("Email nie może być pusty");
 
-    private String message;
+    private final String message;
 
     UserError(String message) {
         this.message = message;
