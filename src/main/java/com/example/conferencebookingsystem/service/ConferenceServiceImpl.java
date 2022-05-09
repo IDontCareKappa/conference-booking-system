@@ -8,6 +8,7 @@ import com.example.conferencebookingsystem.model.Lecture;
 import com.example.conferencebookingsystem.model.User;
 import com.example.conferencebookingsystem.repository.LectureRepo;
 import com.example.conferencebookingsystem.repository.UserRepo;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -23,16 +24,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+@AllArgsConstructor
 @Service
 public class ConferenceServiceImpl implements ConferenceService {
 
     private final LectureRepo lectureRepo;
     private final UserRepo userRepo;
-
-    public ConferenceServiceImpl(LectureRepo conferenceRepo, UserRepo userRepo) {
-        this.lectureRepo = conferenceRepo;
-        this.userRepo = userRepo;
-    }
 
     @Override
     public List<Lecture> getAll() {
@@ -57,7 +54,7 @@ public class ConferenceServiceImpl implements ConferenceService {
 
     @Override
     public List<String> getUserConferenceSchedule(String login) {
-        User user = userRepo.findByLogin(login)
+        User user = userRepo.findFirstByLogin(login)
                 .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
 
         Set<Lecture> lectures = user.getLectures();
@@ -84,7 +81,7 @@ public class ConferenceServiceImpl implements ConferenceService {
             throw new LectureException(LectureError.LECTURE_IS_FULL);
         }
 
-        Optional<User> user = userRepo.findByLogin(login);
+        Optional<User> user = userRepo.findFirstByLogin(login);
         if (user.isPresent()) {
             if (!user.get().getEmail().equals(email)) {
                 throw new UserException(UserError.USER_LOGIN_NOT_AVAILABLE);
@@ -155,11 +152,12 @@ public class ConferenceServiceImpl implements ConferenceService {
     public void cancelReservation(Long lectureId, String login) {
         Lecture lecture = lectureRepo.findById(lectureId)
                 .orElseThrow(() -> new LectureException(LectureError.LECTURE_NOT_FOUND));
-        User user = userRepo.findByLogin(login)
+        User user = userRepo.findFirstByLogin(login)
                 .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
 
         if (lecture.getUsers().contains(user)) {
             lecture.getUsers().remove(user);
+            user.getLectures().remove(lecture);
         } else {
             throw new LectureException(LectureError.LECTURE_USER_NOT_FOUND);
         }
@@ -173,7 +171,7 @@ public class ConferenceServiceImpl implements ConferenceService {
             throw new UserException(UserError.USER_EMAIL_EMPTY);
         }
 
-        User user = userRepo.findByLogin(login)
+        User user = userRepo.findFirstByLogin(login)
                 .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
 
         user.setEmail(newEmail);
