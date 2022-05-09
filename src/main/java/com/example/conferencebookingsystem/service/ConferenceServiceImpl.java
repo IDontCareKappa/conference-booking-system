@@ -32,11 +32,6 @@ public class ConferenceServiceImpl implements ConferenceService {
     private final UserRepo userRepo;
 
     @Override
-    public List<Lecture> getAll() {
-        return lectureRepo.findAll();
-    }
-
-    @Override
     public List<String> getConferenceSchedule() {
         List<String> schedule = new ArrayList<>();
         List<Lecture> lectures = lectureRepo.findAll();
@@ -59,17 +54,21 @@ public class ConferenceServiceImpl implements ConferenceService {
 
         Set<Lecture> lectures = user.getLectures();
         List<String> userLectures = new ArrayList<>();
-        for (Lecture lecture : lectures) {
-            userLectures.add(lecture.getTopic() + " " +
-                    formatDateTime(lecture.getTimeStart()) + " - " +
-                    formatDateTime(lecture.getTimeEnd()));
-        }
+        createUserSchedule(lectures, userLectures);
 
         if (userLectures.isEmpty()) {
             throw new UserException(UserError.USER_IS_NOT_ASSIGN_TO_ANY_LECTURE);
         }
 
         return userLectures;
+    }
+
+    private void createUserSchedule(Set<Lecture> lectures, List<String> userLectures) {
+        for (Lecture lecture : lectures) {
+            userLectures.add(lecture.getTopic() + " " +
+                    formatDateTime(lecture.getTimeStart()) + " - " +
+                    formatDateTime(lecture.getTimeEnd()));
+        }
     }
 
     @Override
@@ -108,7 +107,7 @@ public class ConferenceServiceImpl implements ConferenceService {
 
     private void sendEmailNotification(String userEmail, String lectureTopic) throws IOException {
         final String emailContent = formatDateTime(LocalDateTime.now()) + "\n" + userEmail
-                + "\n" + "Szanowny użytkowniku! Informujemy ze zostales zapisany na prelekcje \"" + lectureTopic + "\"\n";
+                + "\n" + "Szanowny użytkowniku! Informujemy ze zostales zapisany na prelekcje \"" + lectureTopic + "\".\n";
 
         try {
             File file = new File("powiadomienia.txt");
@@ -120,10 +119,8 @@ public class ConferenceServiceImpl implements ConferenceService {
 
         final Path path = Paths.get("powiadomienia.txt");
 
-        try (
-                final BufferedWriter writer = Files.newBufferedWriter(path,
-                        StandardCharsets.UTF_8, StandardOpenOption.APPEND)
-        ) {
+        try (final BufferedWriter writer = Files.newBufferedWriter(path,
+                        StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
             writer.write(emailContent);
             writer.flush();
         }
@@ -183,52 +180,21 @@ public class ConferenceServiceImpl implements ConferenceService {
         List<User> users = userRepo.findAll();
         List<String> registeredUsers = new ArrayList<>();
 
-        for (User user : users) {
-            if (!ObjectUtils.isEmpty(user.getLectures())) {
-                registeredUsers.add(user.getLogin() + " " + user.getEmail());
-            }
+        createRegisteredUsersList(users, registeredUsers);
+
+        if (registeredUsers.isEmpty()){
+            return List.of("Brak użytkowników");
         }
 
         return registeredUsers;
     }
 
-    @Override
-    public List<String> getLecturesInfo() {
-        List<Lecture> lectures = lectureRepo.findAll();
-        List<String> lecturesInfo = new ArrayList<>();
-        int usersCount = 0;
-        for (Lecture lecture : lectures) {
-            usersCount += lecture.getUsers().size();
-        }
-
-        for (Lecture lecture : lectures) {
-            lecturesInfo.add("(" + formatDateTime(lecture.getTimeStart()) + ") " + lecture.getTopic() + " - " +
-                    String.format("%.2f", (100.0 * (double) lecture.getUsers().size() / (double) usersCount)) + "%");
-        }
-
-        return lecturesInfo;
-    }
-
-    @Override
-    public List<String> getTopicsInfo() {
-        List<Lecture> lectures = lectureRepo.findAll();
-        List<String> topicsInfo = new ArrayList<>();
-        Dictionary<LocalDateTime, Integer> usersCount = new Hashtable<>();
-        for (Lecture lecture : lectures) {
-            LocalDateTime key = lecture.getTimeStart();
-            if (usersCount.get(key) == null){
-                usersCount.put(key, lecture.getUsers().size());
-            } else {
-                usersCount.put(key, usersCount.get(key) + lecture.getUsers().size());
+    private void createRegisteredUsersList(List<User> users, List<String> registeredUsers) {
+        for (User user : users) {
+            if (!ObjectUtils.isEmpty(user.getLectures())) {
+                registeredUsers.add(user.getLogin() + " " + user.getEmail());
             }
         }
-
-        for (Lecture lecture : lectures) {
-            topicsInfo.add("(" + formatDateTime(lecture.getTimeStart()) + ") " + lecture.getTopic() + " " +
-                    String.format("%.2f", (100.0 * (double) lecture.getUsers().size() / (double) usersCount.get(lecture.getTimeStart()))) + "%");
-        }
-
-        return topicsInfo;
     }
 
     public String formatDateTime(LocalDateTime date){

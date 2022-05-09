@@ -5,10 +5,8 @@ import com.example.conferencebookingsystem.exception.UserException;
 import com.example.conferencebookingsystem.model.User;
 import com.example.conferencebookingsystem.repository.LectureRepo;
 import com.example.conferencebookingsystem.repository.UserRepo;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
@@ -31,7 +29,6 @@ class ConferenceServiceImplTest {
     void setUp() {
         underTest = new ConferenceServiceImpl(lectureRepo, userRepo);
     }
-
 
     @Test
     void itShouldReturnConferenceSchedule() {
@@ -61,15 +58,20 @@ class ConferenceServiceImplTest {
 
         //given
         String userLogin = "mwharmby8";
-        List<String> userSchedule = new ArrayList<>();
-        userSchedule.add("Frontend development 06-01-2021 12:00 - 06-01-2021 13:45");
-        userSchedule.add("Narzedzie Docker Compose w akcji 06-01-2021 14:00 - 06-01-2021 15:45");
+
+        List<String> userSchedule1 = new ArrayList<>();
+        userSchedule1.add("Narzedzie Docker Compose w akcji 06-01-2021 14:00 - 06-01-2021 15:45");
+        userSchedule1.add("Frontend development 06-01-2021 12:00 - 06-01-2021 13:45");
+
+        List<String> userSchedule2 = new ArrayList<>();
+        userSchedule2.add("Frontend development 06-01-2021 12:00 - 06-01-2021 13:45");
+        userSchedule2.add("Narzedzie Docker Compose w akcji 06-01-2021 14:00 - 06-01-2021 15:45");
 
         //when
         List<String> expected = underTest.getUserConferenceSchedule(userLogin);
 
         //then
-        assertThat(expected).isEqualTo(userSchedule);
+        assertThat(expected).isIn(userSchedule1, userSchedule2);
 
     }
 
@@ -155,45 +157,6 @@ class ConferenceServiceImplTest {
 
         //then
         assertThat(expected).isEqualTo(registeredUsers);
-
-    }
-
-    @Test
-    void itShouldReturnLecturesStatsInfo() {
-
-        //given
-        List<String> stats = new ArrayList<>();
-        stats.add("(06-01-2021 10:00) Cyberbezpieczenstwo w systemach mobilnych - 9,09%");
-        stats.add("(06-01-2021 10:00) Cyberbezpieczenstwo serwisow internetowych - 0,00%");
-        stats.add("(06-01-2021 10:00) Cyberbezpieczenstwo w systemach Linux - 18,18%");
-        stats.add("(06-01-2021 12:00) Frontend development - 18,18%");
-        stats.add("(06-01-2021 12:00) Backend development - 0,00%");
-        stats.add("(06-01-2021 12:00) Fullstack development - 9,09%");
-        stats.add("(06-01-2021 14:00) Dockeryzacja aplikacji - 0,00%");
-        stats.add("(06-01-2021 14:00) Narzedzie Docker Compose w akcji - 18,18%");
-        stats.add("(06-01-2021 14:00) Szybka budowa kontenerow na bazie plikow Dockerfile - 27,27%");
-
-        //when
-        List<String> expected = underTest.getLecturesInfo();
-
-        //then
-        assertThat(expected).isEqualTo(stats);
-
-    }
-
-    @Test
-    void itShouldReturnTopicsStatsInfo() {
-
-        List<String> stats = new ArrayList<>();
-        stats.add("(06-01-2021 10:00) Cyberbezpieczenstwo w systemach mobilnych - 33,33%");
-        stats.add("(06-01-2021 10:00) Cyberbezpieczenstwo serwisow internetowych - 0,00%");
-        stats.add("(06-01-2021 10:00) Cyberbezpieczenstwo w systemach Linux - 66,66%");
-        stats.add("(06-01-2021 12:00) Frontend development - 66,66%");
-        stats.add("(06-01-2021 12:00) Backend development - 0,00%");
-        stats.add("(06-01-2021 12:00) Fullstack development) - 33,33%");
-        stats.add("(06-01-2021 14:00) Dockeryzacja aplikacji - 0,00%");
-        stats.add("(06-01-2021 14:00) Narzedzie Docker Compose w akcji - 40,00%");
-        stats.add("(06-01-2021 14:00) Szybka budowa kontenerow na bazie plikow Dockerfile - 60,00%");
 
     }
 

@@ -1,26 +1,18 @@
 package com.example.conferencebookingsystem.controller;
 
-import com.example.conferencebookingsystem.model.Lecture;
 import com.example.conferencebookingsystem.service.ConferenceService;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api")
 public class ConferenceController {
 
     private final ConferenceService conferenceService;
-
-    public ConferenceController(ConferenceService conferenceService) {
-        this.conferenceService = conferenceService;
-    }
-
-    @GetMapping("/conference")
-    public List<Lecture> getAll(){
-        return conferenceService.getAll();
-    }
 
     @GetMapping("/schedule")
     public List<String> getTopics(){
@@ -56,14 +48,5 @@ public class ConferenceController {
         return conferenceService.getRegisteredUsers();
     }
 
-    @GetMapping("/lectures")
-    public List<String> getLecturesStatistics(){
-        return conferenceService.getLecturesInfo();
-    }
-
-    @GetMapping("topics")
-    public List<String> getTopicsStatistics(){
-        return conferenceService.getTopicsInfo();
-    }
 
 }

@@ -1,13 +1,9 @@
 package com.example.conferencebookingsystem.service;
 
-import com.example.conferencebookingsystem.model.Lecture;
-
 import java.util.List;
 
 
 public interface ConferenceService {
-
-    List<Lecture> getAll();
 
     List<String> getConferenceSchedule();
 
@@ -21,7 +17,4 @@ public interface ConferenceService {
 
     List<String> getRegisteredUsers();
 
-    List<String> getLecturesInfo();
-
-    List<String> getTopicsInfo();
 }
