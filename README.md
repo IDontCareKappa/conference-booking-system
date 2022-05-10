@@ -30,14 +30,16 @@ I recomend to use IntelliJ IDEA to run the application, here's how you can do it
  2. Run IntelliJ IDEA
  3. Select open project
  4. Select the folder with the project
- 5. Select "Trust authors"
+ 5. Select "Trust project"
  6. In the IntelliJ project tree go to src/main/java/com.example.conferencebookingsystem/
- 7. Right click on ConferenceBookingSystemApplication and select Run 'ConferenceBookingSys...' or press Ctrl+Shift+F10
+ 7. Right click on ConferenceBookingSystemApplication and select Run 'ConferenceBookingSys...' or open this file and press Ctrl+Shift+F10
 ```
 
 ## Available endpoints
 
 If you run this application on your own machine than main address will be ```localhost:8080```, for example: ```localhost:8080/api/users```
+
+Ther's some dummy data in the main class that allows to test the api
 
 Request type | Description | Route | Example
 -------------|-------------|-------|--------
