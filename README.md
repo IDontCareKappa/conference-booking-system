@@ -13,8 +13,8 @@
 
 ## Technologies used to develop application
 * Backend
-  - Java 11
-  - Spring Boot 2.6.7
+  - Java
+  - Spring Boot
   - Hibernate
   - H2/JPA
   - Lombok
