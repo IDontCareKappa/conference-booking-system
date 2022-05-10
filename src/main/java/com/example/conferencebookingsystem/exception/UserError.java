@@ -7,7 +7,8 @@ public enum UserError {
     USER_ALREADY_ASSIGNED("Uzytkownik jest juz zapisany do tej prelekcji"),
     USER_LOGIN_NOT_AVAILABLE("Podany login jest już zajęty"),
     USER_ASSIGNED_FOR_THIS_TIME("Uzytkownik jest juz zapisany na prelekcje o tej godzinie"),
-    USER_EMAIL_EMPTY("Email nie może być pusty");
+    USER_EMAIL_EMPTY("Email nie może być pusty"),
+    USER_LOGIN_EMPTY("Login nie może być pusty");
 
     private final String message;
 

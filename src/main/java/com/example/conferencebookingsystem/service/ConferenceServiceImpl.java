@@ -73,6 +73,12 @@ public class ConferenceServiceImpl implements ConferenceService {
 
     @Override
     public void registerUserForLecture(Long lectureId, String login, String email) {
+        if (ObjectUtils.isEmpty(login)){
+            throw new UserException(UserError.USER_LOGIN_EMPTY);
+        } else if (ObjectUtils.isEmpty(email)){
+            throw new UserException(UserError.USER_EMAIL_EMPTY);
+        }
+
         Lecture lecture = lectureRepo.findById(lectureId)
                 .orElseThrow(() -> new LectureException(LectureError.LECTURE_NOT_FOUND));
 
