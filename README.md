@@ -1,26 +1,4 @@
 <h1  align='center'>Conference booking system</h1>
- 
-## Key features
-* The user can view the conference schedule,
-* After entering your login, you can view the lectures you have subscribed to,
-* The user can make a reservation,
-* The user can cancel the reservation,
-* You may update your e-mail address,
-* The system can display a list of registered users with their e-mail addresses,
-* The system enables the display of lectures according to the interest of users,
-* The system enables the display of thematic paths according to users interests,
-* After the reservation has been made, the system sends a notification to the user
-
-## Technologies used to develop application
-* Backend
-  - Java
-  - Spring Boot
-  - Hibernate
-  - H2/JPA
-  - Lombok
-* Tools
-  - IntelliJ IDEA
-  - Postman
 
 ## Application launch
 
@@ -44,12 +22,34 @@ Ther's some dummy data in the main class that allows to test the api
 Request type | Description | Route | Example
 -------------|-------------|-------|--------
   GET | Conference schedule | /api/schedule | Same as route
-  GET | User schedule | /api/{UserLogin} | /api/John
+  GET | User schedule | /api/user/{UserLogin} | /api/user/mwharmby8
   GET | All registered users | /api/users | Same as route
   GET | Lectures by interest | /api/lectures | Same as route
   GET | Thematic paths by interest | /api/topics | Same as route
   POST | Register user for lecture | /api/reservation?lectureId=&login=&email= | /api/reservation?lectureId=4&login=John&email=john@gmail.com
-  PATCH | Update user email | /api/update?login=&newEmail= | /api/update?login=John&newEmail=john25@gmail.com    
-  DELETE | Cancel user reservation | /api/cancel?lectureId=&login= | /api/cancel?lectureId=4&login=John
+  PATCH | Update user email | /api/update?login=&newEmail= | /api/update?login=mwharmby8&newEmail=mwharmby8@symantec.com    
+  DELETE | Cancel user reservation | /api/cancel?lectureId=&login= | /api/cancel?lectureId=8&login=mwharmby8
 
 I recommend using Postman as a web client to test the api
+ 
+## Key features
+* The user can view the conference schedule,
+* After entering your login, you can view the lectures you have subscribed to,
+* The user can make a reservation,
+* The user can cancel the reservation,
+* You may update your e-mail address,
+* The system can display a list of registered users with their e-mail addresses,
+* The system enables the display of lectures according to the interest of users,
+* The system enables the display of thematic paths according to users interests,
+* After the reservation has been made, the system sends a notification to the user
+
+## Technologies used to develop application
+* Backend
+  - Java
+  - Spring Boot
+  - Hibernate
+  - H2/JPA
+  - Lombok
+* Tools
+  - IntelliJ IDEA
+  - Postman
