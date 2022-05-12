@@ -1,6 +1,6 @@
 package com.example.conferencebookingsystem.repository;
 
-import com.example.conferencebookingsystem.model.User;
+import com.example.conferencebookingsystem.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

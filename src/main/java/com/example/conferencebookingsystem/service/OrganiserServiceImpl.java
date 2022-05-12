@@ -1,10 +1,13 @@
 package com.example.conferencebookingsystem.service;
 
-import com.example.conferencebookingsystem.model.Lecture;
+import com.example.conferencebookingsystem.model.dto.LectureStatsDTO;
+import com.example.conferencebookingsystem.model.entity.Lecture;
 import com.example.conferencebookingsystem.repository.LectureRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -19,9 +22,9 @@ public class OrganiserServiceImpl implements OrganiserService {
     private final LectureRepo lectureRepo;
 
     @Override
-    public List<String> getLecturesStats() {
+    public List<LectureStatsDTO> getLecturesStats() {
         List<Lecture> lectures = lectureRepo.findAll();
-        List<String> lecturesInfo = new ArrayList<>();
+        List<LectureStatsDTO> lecturesInfo = new ArrayList<>();
         int usersCount = 0;
         for (Lecture lecture : lectures) {
             usersCount += lecture.getUsers().size();
@@ -32,21 +35,36 @@ public class OrganiserServiceImpl implements OrganiserService {
         return lecturesInfo;
     }
 
-    private void createLecturesStats(List<Lecture> lectures, List<String> lecturesInfo, int usersCount) {
+    private void createLecturesStats(List<Lecture> lectures,
+                                     List<LectureStatsDTO> lecturesInfo,
+                                     int usersCount) {
         for (Lecture lecture : lectures) {
             if (usersCount == 0){
-                lecturesInfo.add("(" + formatDateTime(lecture.getTimeStart()) + ") " + lecture.getTopic() + " - 0,00%");
+                lecturesInfo.add(
+                        new LectureStatsDTO(
+                                lecture.getTopic(),
+                                lecture.getTimeStart(),
+                                0.00
+                        )
+                );
             } else {
-                lecturesInfo.add("(" + formatDateTime(lecture.getTimeStart()) + ") " + lecture.getTopic() + " - " +
-                        String.format("%.2f", (100.0 * (double) lecture.getUsers().size() / (double) usersCount)) + "%");
+                lecturesInfo.add(
+                        new LectureStatsDTO(
+                                lecture.getTopic(),
+                                lecture.getTimeStart(),
+                                BigDecimal.valueOf(100.0 * (double) lecture.getUsers().size() / (double) usersCount)
+                                        .setScale(2, RoundingMode.HALF_UP)
+                                        .doubleValue()
+                        )
+                );
             }
         }
     }
 
     @Override
-    public List<String> getTopicsStats() {
+    public List<LectureStatsDTO> getTopicsStats() {
         List<Lecture> lectures = lectureRepo.findAll();
-        List<String> topicsInfo = new ArrayList<>();
+        List<LectureStatsDTO> topicsInfo = new ArrayList<>();
         Dictionary<LocalDateTime, Integer> usersCount = new Hashtable<>();
 
         countUsersByLectureTime(lectures, usersCount);
@@ -56,15 +74,28 @@ public class OrganiserServiceImpl implements OrganiserService {
         return topicsInfo;
     }
 
-    private void createTopicsStats(List<Lecture> lectures, List<String> topicsInfo,
+    private void createTopicsStats(List<Lecture> lectures, List<LectureStatsDTO> topicsInfo,
                                    Dictionary<LocalDateTime, Integer> usersCount) {
         for (Lecture lecture : lectures) {
             LocalDateTime timeStart = lecture.getTimeStart();
             if (usersCount.get(timeStart) == 0){
-                topicsInfo.add("(" + formatDateTime(timeStart) + ") " + lecture.getTopic() + " - 0,00%");
+                topicsInfo.add(
+                        new LectureStatsDTO(
+                                lecture.getTopic(),
+                                lecture.getTimeStart(),
+                                0.00
+                        )
+                );
             } else {
-                topicsInfo.add("(" + formatDateTime(timeStart) + ") " + lecture.getTopic() + " - " +
-                        String.format("%.2f", (100.0 * (double) lecture.getUsers().size() / (double) usersCount.get(timeStart))) + "%");
+                topicsInfo.add(
+                        new LectureStatsDTO(
+                                lecture.getTopic(),
+                                lecture.getTimeStart(),
+                                BigDecimal.valueOf(100.0 * (double) lecture.getUsers().size() / (double) usersCount.get(timeStart))
+                                        .setScale(2, RoundingMode.HALF_UP)
+                                        .doubleValue()
+                        )
+                );
             }
         }
     }
@@ -78,10 +109,6 @@ public class OrganiserServiceImpl implements OrganiserService {
                 usersCount.put(key, usersCount.get(key) + lecture.getUsers().size());
             }
         }
-    }
-
-    public String formatDateTime(LocalDateTime date){
-        return date.format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm"));
     }
 
 }

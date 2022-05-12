@@ -2,7 +2,7 @@ package com.example.conferencebookingsystem.repository;
 
 import com.example.conferencebookingsystem.exception.UserError;
 import com.example.conferencebookingsystem.exception.UserException;
-import com.example.conferencebookingsystem.model.User;
+import com.example.conferencebookingsystem.model.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

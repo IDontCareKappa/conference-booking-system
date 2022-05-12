@@ -1,5 +1,7 @@
 package com.example.conferencebookingsystem.controller;
 
+import com.example.conferencebookingsystem.model.dto.LectureDTO;
+import com.example.conferencebookingsystem.model.dto.UserDTO;
 import com.example.conferencebookingsystem.service.ConferenceService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +17,12 @@ public class ConferenceController {
     private final ConferenceService conferenceService;
 
     @GetMapping("/schedule")
-    public List<String> getTopics(){
+    public List<LectureDTO> getConferenceSchedule(){
         return conferenceService.getConferenceSchedule();
     }
 
     @GetMapping("/user/{login}")
-    public List<String> getUserSchedule(@PathVariable @Valid String login){
+    public List<LectureDTO> getUserSchedule(@PathVariable @Valid String login){
         return conferenceService.getUserConferenceSchedule(login);
     }
 
@@ -44,7 +46,7 @@ public class ConferenceController {
     }
 
     @GetMapping("/users")
-    public List<String> getRegisteredUsers(){
+    public List<UserDTO> getRegisteredUsers(){
         return conferenceService.getRegisteredUsers();
     }
 

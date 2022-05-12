@@ -1,5 +1,6 @@
 package com.example.conferencebookingsystem.service;
 
+import com.example.conferencebookingsystem.model.dto.LectureStatsDTO;
 import com.example.conferencebookingsystem.repository.LectureRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,7 @@ class OrganiserServiceImplTest {
         stats.add("(06-01-2021 14:00) Szybka budowa kontenerow na bazie plikow Dockerfile - 27,27%");
 
         //when
-        List<String> expected = underTest.getLecturesStats();
+        List<LectureStatsDTO> expected = underTest.getLecturesStats();
 
         //then
         assertThat(expected).isEqualTo(stats);
@@ -62,7 +63,7 @@ class OrganiserServiceImplTest {
         stats.add("(06-01-2021 14:00) Szybka budowa kontenerow na bazie plikow Dockerfile - 60,00%");
 
         //when
-        List<String> expected = underTest.getTopicsStats();
+        List<LectureStatsDTO> expected = underTest.getTopicsStats();
 
         //then
         assertThat(expected).isEqualTo(stats);

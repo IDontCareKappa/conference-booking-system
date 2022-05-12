@@ -1,7 +1,9 @@
-package com.example.conferencebookingsystem.model;
+package com.example.conferencebookingsystem.model.entity;
 
+import com.example.conferencebookingsystem.model.dto.LectureDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+@NoArgsConstructor
 @Setter
 @Getter
 @Entity
@@ -41,12 +44,17 @@ public class Lecture {
                             nullable = false, updatable = false)})
     private Set<User> users = new HashSet<>();
 
-    public Lecture() {
-    }
-
     public Lecture(String topic, LocalDateTime timeStart, LocalDateTime timeEnd) {
         this.topic = topic;
         this.timeStart = timeStart;
         this.timeEnd = timeEnd;
+    }
+
+    public LectureDTO getLectureInfo(){
+        return new LectureDTO(
+                this.topic,
+                this.timeStart,
+                this.timeEnd
+        );
     }
 }

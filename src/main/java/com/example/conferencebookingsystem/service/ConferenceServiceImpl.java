@@ -4,8 +4,10 @@ import com.example.conferencebookingsystem.exception.LectureError;
 import com.example.conferencebookingsystem.exception.LectureException;
 import com.example.conferencebookingsystem.exception.UserError;
 import com.example.conferencebookingsystem.exception.UserException;
-import com.example.conferencebookingsystem.model.Lecture;
-import com.example.conferencebookingsystem.model.User;
+import com.example.conferencebookingsystem.model.dto.LectureDTO;
+import com.example.conferencebookingsystem.model.dto.UserDTO;
+import com.example.conferencebookingsystem.model.entity.Lecture;
+import com.example.conferencebookingsystem.model.entity.User;
 import com.example.conferencebookingsystem.repository.LectureRepo;
 import com.example.conferencebookingsystem.repository.UserRepo;
 import lombok.AllArgsConstructor;
@@ -22,7 +24,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @AllArgsConstructor
 @Service
@@ -32,44 +37,30 @@ public class ConferenceServiceImpl implements ConferenceService {
     private final UserRepo userRepo;
 
     @Override
-    public List<String> getConferenceSchedule() {
-        List<String> schedule = new ArrayList<>();
+    public List<LectureDTO> getConferenceSchedule() {
+        List<LectureDTO> schedule = new ArrayList<>();
         List<Lecture> lectures = lectureRepo.findAll();
-        createSchedule(schedule, lectures);
+
+        lectures.forEach(lecture -> schedule.add(lecture.getLectureInfo()));
+
         return schedule;
     }
 
-    private void createSchedule(List<String> schedule, List<Lecture> lectures) {
-        for (Lecture lecture : lectures) {
-            schedule.add(lecture.getTopic() + " (" +
-                    formatDateTime(lecture.getTimeStart()) + " - " +
-                    formatDateTime(lecture.getTimeEnd()) + ")");
-        }
-    }
-
     @Override
-    public List<String> getUserConferenceSchedule(String login) {
+    public List<LectureDTO> getUserConferenceSchedule(String login) {
         User user = userRepo.findFirstByLogin(login)
                 .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
 
         Set<Lecture> lectures = user.getLectures();
-        List<String> userLectures = new ArrayList<>();
+        List<LectureDTO> userLectures = new ArrayList<>();
 
-        createUserSchedule(lectures, userLectures);
+        lectures.forEach(lecture -> userLectures.add(lecture.getLectureInfo()));
 
         if (userLectures.isEmpty()) {
             throw new UserException(UserError.USER_IS_NOT_ASSIGN_TO_ANY_LECTURE);
         }
 
         return userLectures;
-    }
-
-    private void createUserSchedule(Set<Lecture> lectures, List<String> userLectures) {
-        for (Lecture lecture : lectures) {
-            userLectures.add(lecture.getTopic() + " " +
-                    formatDateTime(lecture.getTimeStart()) + " - " +
-                    formatDateTime(lecture.getTimeEnd()));
-        }
     }
 
     @Override
@@ -188,25 +179,20 @@ public class ConferenceServiceImpl implements ConferenceService {
     }
 
     @Override
-    public List<String> getRegisteredUsers() {
+    public List<UserDTO> getRegisteredUsers() {
         List<User> users = userRepo.findAll();
-        List<String> registeredUsers = new ArrayList<>();
+        List<UserDTO> registeredUsers = new ArrayList<>();
 
-        createRegisteredUsersList(users, registeredUsers);
+        users.forEach(user -> {
+            if (user.isRegisterdForAnyLecture())
+                registeredUsers.add(user.getUserInfo());
+        });
 
         if (registeredUsers.isEmpty()){
-            return List.of("Brak użytkowników");
+            throw new UserException(UserError.NO_USER_IS_REGISTERED);
         }
 
         return registeredUsers;
-    }
-
-    private void createRegisteredUsersList(List<User> users, List<String> registeredUsers) {
-        for (User user : users) {
-            if (!ObjectUtils.isEmpty(user.getLectures())) {
-                registeredUsers.add(user.getLogin() + " " + user.getEmail());
-            }
-        }
     }
 
     public String formatDateTime(LocalDateTime date){

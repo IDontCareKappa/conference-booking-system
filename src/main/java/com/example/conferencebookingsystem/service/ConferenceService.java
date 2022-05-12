@@ -1,13 +1,16 @@
 package com.example.conferencebookingsystem.service;
 
+import com.example.conferencebookingsystem.model.dto.LectureDTO;
+import com.example.conferencebookingsystem.model.dto.UserDTO;
+
 import java.util.List;
 
 
 public interface ConferenceService {
 
-    List<String> getConferenceSchedule();
+    List<LectureDTO> getConferenceSchedule();
 
-    List<String> getUserConferenceSchedule(String login);
+    List<LectureDTO> getUserConferenceSchedule(String login);
 
     void registerUserForLecture(Long lectureId, String login, String email);
 
@@ -15,6 +18,6 @@ public interface ConferenceService {
 
     void updateEmail(String login, String newEmail);
 
-    List<String> getRegisteredUsers();
+    List<UserDTO> getRegisteredUsers();
 
 }

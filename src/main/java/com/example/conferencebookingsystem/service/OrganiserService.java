@@ -1,11 +1,13 @@
 package com.example.conferencebookingsystem.service;
 
+import com.example.conferencebookingsystem.model.dto.LectureStatsDTO;
+
 import java.util.List;
 
 public interface OrganiserService {
 
-    List<String> getLecturesStats();
+    List<LectureStatsDTO> getLecturesStats();
 
-    List<String> getTopicsStats();
+    List<LectureStatsDTO> getTopicsStats();
 
 }

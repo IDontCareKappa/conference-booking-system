@@ -2,7 +2,9 @@ package com.example.conferencebookingsystem.service;
 
 import com.example.conferencebookingsystem.exception.UserError;
 import com.example.conferencebookingsystem.exception.UserException;
-import com.example.conferencebookingsystem.model.User;
+import com.example.conferencebookingsystem.model.dto.LectureDTO;
+import com.example.conferencebookingsystem.model.dto.UserDTO;
+import com.example.conferencebookingsystem.model.entity.User;
 import com.example.conferencebookingsystem.repository.LectureRepo;
 import com.example.conferencebookingsystem.repository.UserRepo;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +48,7 @@ class ConferenceServiceImplTest {
         schedule.add("Szybka budowa kontenerow na bazie plikow Dockerfile (06-01-2021 14:00 - 06-01-2021 15:45)");
 
         //when
-        List<String> expected = underTest.getConferenceSchedule();
+        List<LectureDTO> expected = underTest.getConferenceSchedule();
 
         //then
         assertThat(expected).isEqualTo(schedule);
@@ -68,7 +70,7 @@ class ConferenceServiceImplTest {
         userSchedule2.add("Narzedzie Docker Compose w akcji 06-01-2021 14:00 - 06-01-2021 15:45");
 
         //when
-        List<String> expected = underTest.getUserConferenceSchedule(userLogin);
+        List<LectureDTO> expected = underTest.getUserConferenceSchedule(userLogin);
 
         //then
         assertThat(expected).isIn(userSchedule1, userSchedule2);
@@ -109,7 +111,7 @@ class ConferenceServiceImplTest {
 
         //when
         underTest.cancelReservation(lectureId, login);
-        List<String> expected = underTest.getUserConferenceSchedule(login);
+        List<LectureDTO> expected = underTest.getUserConferenceSchedule(login);
 
         //then
         assertThat(expected).isEqualTo(userSchedule);
@@ -153,7 +155,7 @@ class ConferenceServiceImplTest {
         registeredUsers.add("mwharmby8 bcockney8@symantec.com");
 
         //when
-        List<String> expected = underTest.getRegisteredUsers();
+        List<UserDTO> expected = underTest.getRegisteredUsers();
 
         //then
         assertThat(expected).isEqualTo(registeredUsers);

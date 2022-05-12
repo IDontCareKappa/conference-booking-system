@@ -1,7 +1,7 @@
 package com.example.conferencebookingsystem;
 
-import com.example.conferencebookingsystem.model.Lecture;
-import com.example.conferencebookingsystem.model.User;
+import com.example.conferencebookingsystem.model.entity.Lecture;
+import com.example.conferencebookingsystem.model.entity.User;
 import com.example.conferencebookingsystem.repository.LectureRepo;
 import com.example.conferencebookingsystem.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +11,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 
