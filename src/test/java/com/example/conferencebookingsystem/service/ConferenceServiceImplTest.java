@@ -91,8 +91,7 @@ class ConferenceServiceImplTest {
 
         //when
         underTest.registerUserForLecture(lectureId, login, email);
-        User expected = userRepo.findFirstByLogin(login)
-                .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
+        User expected = userRepo.getByLogin(login);
 
         //then
         assertThat(expected.getLogin()).isEqualTo(user.getLogin());
@@ -124,13 +123,11 @@ class ConferenceServiceImplTest {
         //given
         String login = "mwharmby8";
         String newEmail = "bcockney8@symantec.com";
-        User user = userRepo.findFirstByLogin(login)
-                .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
+        User user = userRepo.getByLogin(login);
 
         //when
         underTest.updateEmail(login, newEmail);
-        User expected = userRepo.findFirstByLogin(login)
-                .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
+        User expected = userRepo.getByLogin(login);
 
         //then
         assertThat(expected.getLogin()).isEqualTo(user.getLogin());

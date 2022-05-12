@@ -39,7 +39,7 @@ public class ConferenceServiceImpl implements ConferenceService {
     @Override
     public List<LectureDTO> getConferenceSchedule() {
         List<LectureDTO> schedule = new ArrayList<>();
-        List<Lecture> lectures = lectureRepo.findAll();
+        List<Lecture> lectures = lectureRepo.getAll();
 
         lectures.forEach(lecture -> schedule.add(lecture.getLectureInfo()));
 
@@ -48,8 +48,7 @@ public class ConferenceServiceImpl implements ConferenceService {
 
     @Override
     public List<LectureDTO> getUserConferenceSchedule(String login) {
-        User user = userRepo.findFirstByLogin(login)
-                .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
+        User user = userRepo.getByLogin(login);
 
         Set<Lecture> lectures = user.getLectures();
         List<LectureDTO> userLectures = new ArrayList<>();
@@ -71,8 +70,7 @@ public class ConferenceServiceImpl implements ConferenceService {
             throw new UserException(UserError.USER_EMAIL_EMPTY);
         }
 
-        Lecture lecture = lectureRepo.findById(lectureId)
-                .orElseThrow(() -> new LectureException(LectureError.LECTURE_NOT_FOUND));
+        Lecture lecture = lectureRepo.getByID(lectureId);
         if (lecture.getUsers().size() >= 5) {
             throw new LectureException(LectureError.LECTURE_IS_FULL);
         }
@@ -87,7 +85,7 @@ public class ConferenceServiceImpl implements ConferenceService {
     }
 
     private void makeReservation(String login, String email, Lecture lecture) {
-        Optional<User> user = userRepo.findFirstByLogin(login);
+        Optional<User> user = userRepo.findByLogin(login);
         if (user.isPresent()) {
             if (!user.get().getEmail().equals(email)) {
                 throw new UserException(UserError.USER_LOGIN_NOT_AVAILABLE);
@@ -150,10 +148,8 @@ public class ConferenceServiceImpl implements ConferenceService {
 
     @Override
     public void cancelReservation(Long lectureId, String login) {
-        Lecture lecture = lectureRepo.findById(lectureId)
-                .orElseThrow(() -> new LectureException(LectureError.LECTURE_NOT_FOUND));
-        User user = userRepo.findFirstByLogin(login)
-                .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
+        Lecture lecture = lectureRepo.getByID(lectureId);
+        User user = userRepo.getByLogin(login);
 
         if (lecture.getUsers().contains(user)) {
             lecture.getUsers().remove(user);
@@ -171,8 +167,7 @@ public class ConferenceServiceImpl implements ConferenceService {
             throw new UserException(UserError.USER_EMAIL_EMPTY);
         }
 
-        User user = userRepo.findFirstByLogin(login)
-                .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
+        User user = userRepo.getByLogin(login);
 
         user.setEmail(newEmail);
         userRepo.save(user);

@@ -1,7 +1,5 @@
 package com.example.conferencebookingsystem.repository;
 
-import com.example.conferencebookingsystem.exception.UserError;
-import com.example.conferencebookingsystem.exception.UserException;
 import com.example.conferencebookingsystem.model.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +24,7 @@ class UserRepoTest {
         underTest.save(user);
 
         //when
-        User expected = underTest.findFirstByLogin(login)
-                .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
+        User expected = underTest.getByLogin(login);
 
         //then
         assertThat(expected.getLogin()).isEqualTo(user.getLogin());
