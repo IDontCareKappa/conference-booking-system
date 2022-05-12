@@ -54,6 +54,7 @@ public class ConferenceServiceImpl implements ConferenceService {
 
         Set<Lecture> lectures = user.getLectures();
         List<String> userLectures = new ArrayList<>();
+
         createUserSchedule(lectures, userLectures);
 
         if (userLectures.isEmpty()) {
@@ -81,16 +82,26 @@ public class ConferenceServiceImpl implements ConferenceService {
 
         Lecture lecture = lectureRepo.findById(lectureId)
                 .orElseThrow(() -> new LectureException(LectureError.LECTURE_NOT_FOUND));
-
-        if (lecture.getUsers().size() == 5) {
+        if (lecture.getUsers().size() >= 5) {
             throw new LectureException(LectureError.LECTURE_IS_FULL);
         }
 
+        makeReservation(login, email, lecture);
+
+        try {
+            sendEmailNotification(email, lecture.getTopic());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void makeReservation(String login, String email, Lecture lecture) {
         Optional<User> user = userRepo.findFirstByLogin(login);
         if (user.isPresent()) {
             if (!user.get().getEmail().equals(email)) {
                 throw new UserException(UserError.USER_LOGIN_NOT_AVAILABLE);
             }
+
             checkUserTimeAvailability(lecture, user);
             checkUsersOfLecture(email, lecture);
 
@@ -100,20 +111,15 @@ public class ConferenceServiceImpl implements ConferenceService {
             User newUser = new User(login, email);
             userRepo.save(newUser);
 
-            lecture.getUsers().addAll(List.of(newUser));
+            lecture.getUsers().add(newUser);
             lectureRepo.save(lecture);
-        }
-
-        try {
-            sendEmailNotification(email, lecture.getTopic());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
     private void sendEmailNotification(String userEmail, String lectureTopic) throws IOException {
         final String emailContent = formatDateTime(LocalDateTime.now()) + "\n" + userEmail
-                + "\n" + "Szanowny użytkowniku! Informujemy ze zostales zapisany na prelekcje \"" + lectureTopic + "\".\n";
+                + "\n" + "Szanowny użytkowniku! Informujemy ze zostales zapisany na prelekcje \""
+                + lectureTopic + "\".\n";
 
         try {
             File file = new File("powiadomienia.txt");
