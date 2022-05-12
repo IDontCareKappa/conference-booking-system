@@ -1,5 +1,6 @@
 package com.example.conferencebookingsystem.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ public class LectureStatsDTO {
 
     private String topic;
 
+    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
     private LocalDateTime timeStart;
 
     private double interest;

@@ -5,7 +5,6 @@ import com.example.conferencebookingsystem.exception.LectureException;
 import com.example.conferencebookingsystem.model.entity.Lecture;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 

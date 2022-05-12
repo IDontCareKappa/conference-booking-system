@@ -14,20 +14,16 @@ class UserRepoTest {
     private UserRepo underTest;
 
     @Test
-    void itShouldFindUserByLogin() {
+    void itShouldGetUserByLogin() {
         //given
         String login = "slemarchant5";
-        User user = new User(
-                login,
-                "dossenna5@cnet.com"
-        );
-        underTest.save(user);
+        String email = "dossenna5@cnet.com";
 
         //when
         User expected = underTest.getByLogin(login);
 
         //then
-        assertThat(expected.getLogin()).isEqualTo(user.getLogin());
-        assertThat(expected.getEmail()).isEqualTo(user.getEmail());
+        assertThat(expected.getLogin()).isEqualTo(login);
+        assertThat(expected.getEmail()).isEqualTo(email);
     }
 }
