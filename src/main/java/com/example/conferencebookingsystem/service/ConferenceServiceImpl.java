@@ -85,16 +85,26 @@ public class ConferenceServiceImpl implements ConferenceService {
     }
 
     private void makeReservation(String login, String email, Lecture lecture) {
-        Optional<User> user = userRepo.findByLogin(login);
-        if (user.isPresent()) {
-            if (!user.get().getEmail().equals(email)) {
+        Optional<User> userByLogin = userRepo.findByLogin(login);
+        Optional<User> userByEmail = userRepo.findByEmail(email);
+
+        if (userByEmail.isPresent()){
+            if (!userByEmail.get().getLogin().equals(login)) {
+                throw new UserException(UserError.USER_EMAIL_NOT_AVAILABLE);
+            }
+        }
+
+        if (userByLogin.isPresent()) {
+            if (!userByLogin.get().getEmail().equals(email)) {
                 throw new UserException(UserError.USER_LOGIN_NOT_AVAILABLE);
             }
 
-            checkUserTimeAvailability(lecture, user);
+
+
+            checkUserTimeAvailability(lecture, userByLogin);
             checkUsersOfLecture(email, lecture);
 
-            lecture.getUsers().addAll(List.of(user.get()));
+            lecture.getUsers().addAll(List.of(userByLogin.get()));
             lectureRepo.save(lecture);
         } else {
             User newUser = new User(login, email);
